@@ -143,7 +143,8 @@ traceroute -n -m 15 1.1.1.1
 
 1. Check if your interface uses DHCP.
 ```
-cat /etc/netplan/*.yaml 2>/dev/null || cat /etc/network/interfaces 2>/dev/null | head -20
+# Netplan files may require sudo on Ubuntu 24.04
+sudo cat /etc/netplan/*.yaml 2>/dev/null || cat /etc/network/interfaces 2>/dev/null | head -20
 ```
 
 2. View current DHCP lease information (if using NetworkManager).
