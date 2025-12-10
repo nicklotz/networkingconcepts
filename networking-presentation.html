@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Networking Fundamentals</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/reset.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/reveal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/theme/black.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/plugin/highlight/monokai.css">
+    <style>
+        :root {
+            --net-blue: #3B82F6;
+            --net-dark: #1E3A5F;
+            --net-light: #DBEAFE;
+            --net-white: #FFFFFF;
+            --net-gray: #6B7280;
+        }
+
+        .reveal { background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%); }
+        .reveal h1, .reveal h2, .reveal h3 { text-transform: none; color: var(--net-blue); }
+        .reveal h1 { color: var(--net-white); }
+        .reveal section { text-align: left; }
+        .reveal section.center { text-align: center; }
+        .reveal pre { width: 100%; }
+        .reveal code { background: #1e3a5f; padding: 2px 8px; border-radius: 3px; }
+        .highlight { color: var(--net-blue); }
+        .highlight-gold { color: #FBBF24; }
+
+        .topic-osi { color: #60A5FA; }
+        .topic-tcp { color: #34D399; }
+        .topic-ip { color: #F472B6; }
+        .topic-services { color: #A78BFA; }
+        .topic-routing { color: #FBBF24; }
+
+        .two-column { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+        .three-column { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; }
+        .small-text { font-size: 0.65em; }
+        .tiny-text { font-size: 0.55em; }
+
+        .reveal h1 { font-size: 2.2em; margin-bottom: 0.5em; }
+        .reveal h2 { font-size: 1.6em; margin-bottom: 0.5em; margin-top: 0; }
+        .reveal h3 { font-size: 1.2em; margin-top: 1.2rem; margin-bottom: 0.6rem; }
+        .reveal h4 { font-size: 1em; margin-top: 1rem; margin-bottom: 0.4rem; }
+        .reveal ul, .reveal ol { margin-top: 0.5rem; margin-bottom: 0.5rem; font-size: 0.85em; }
+        .reveal li { margin-bottom: 0.3rem; line-height: 1.3; }
+        .reveal p { margin: 0.5rem 0; font-size: 0.85em; line-height: 1.4; }
+
+        .reveal .slides section {
+            max-height: 100%;
+            overflow-y: auto;
+        }
+
+        .topic-card {
+            background: rgba(59, 130, 246, 0.1);
+            border-left: 4px solid var(--net-blue);
+            padding: 0.6rem;
+            margin: 0.4rem 0;
+            font-size: 0.85em;
+        }
+        .topic-card ul, .topic-card ol { margin: 0.3rem 0; }
+        .topic-card li { margin-bottom: 0.2rem; }
+
+        .lab-slide {
+            background: linear-gradient(135deg, #064e3b 0%, #065f46 100%);
+            border: 3px solid #34D399;
+        }
+        .lab-slide h2 { color: #34D399; }
+
+        .reveal table {
+            font-size: 0.7em;
+            margin: 0.5rem 0;
+        }
+        .reveal table td, .reveal table th {
+            padding: 0.3rem 0.5rem;
+        }
+
+        .day-header {
+            background: var(--net-dark);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        .code-block {
+            background: #1e293b;
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: monospace;
+            font-size: 0.7em;
+            overflow-x: auto;
+        }
+
+        .command { color: #60A5FA; }
+        .string { color: #34D399; }
+        .comment { color: #6B7280; }
+        .keyword { color: #F472B6; }
+
+        .layer-box {
+            padding: 0.5rem;
+            margin: 0.2rem 0;
+            border-radius: 4px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+
+            <!-- Title Slide -->
+            <section class="center">
+                <h1>Networking Fundamentals</h1>
+                <h3>Understanding How Networks Work</h3>
+                <p style="margin-top: 2rem; color: var(--net-gray);">1-Day Training Course</p>
+            </section>
+
+            <!-- Course Overview -->
+            <section>
+                <h2>Course Overview</h2>
+                <p>Learn basic networking knowledge and skills essential for systems administrators and developers.</p>
+
+                <h3>What You'll Learn</h3>
+                <div class="two-column small-text">
+                    <div>
+                        <ul>
+                            <li>OSI and TCP/IP reference models</li>
+                            <li>Common protocols and ports</li>
+                            <li>IP addressing and subnetting</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <ul>
+                            <li>CIDR notation</li>
+                            <li>NAT, DHCP, and routing</li>
+                            <li>DNS fundamentals</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="topic-card" style="margin-top: 1rem;">
+                    <p><strong>Course Philosophy:</strong> 70% hands-on labs, 30% instructor-led discussion</p>
+                </div>
+            </section>
+
+            <!-- Agenda -->
+            <section>
+                <h2>Agenda</h2>
+                <div class="two-column small-text">
+                    <div class="topic-card">
+                        <h4 class="topic-osi">Morning</h4>
+                        <ul>
+                            <li>OSI Reference Model</li>
+                            <li>TCP/IP Model</li>
+                            <li>Protocols and Ports</li>
+                            <li>Network Tools Overview</li>
+                        </ul>
+                    </div>
+                    <div class="topic-card">
+                        <h4 class="topic-services">Afternoon</h4>
+                        <ul>
+                            <li>IP Addressing Fundamentals</li>
+                            <li>Subnetting and CIDR</li>
+                            <li>NAT and Routing</li>
+                            <li>DHCP and DNS</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section: OSI Model -->
+            <section class="center">
+                <div class="day-header">
+                    <h3 style="margin: 0; color: white;">Module 1</h3>
+                </div>
+                <h1 class="topic-osi">The OSI Model</h1>
+            </section>
+
+            <!-- Why Models -->
+            <section>
+                <h2 class="topic-osi">Why Reference Models?</h2>
+
+                <p>Reference models provide a common framework for understanding how network communication works.</p>
+
+                <h3>Benefits</h3>
+                <ul>
+                    <li class="fragment"><strong>Standardization:</strong> Common language for vendors and engineers</li>
+                    <li class="fragment"><strong>Modularity:</strong> Changes to one layer don't affect others</li>
+                    <li class="fragment"><strong>Troubleshooting:</strong> Isolate problems to specific layers</li>
+                    <li class="fragment"><strong>Interoperability:</strong> Different vendors' equipment can work together</li>
+                </ul>
+            </section>
+
+            <!-- OSI 7 Layers -->
+            <section>
+                <h2 class="topic-osi">OSI Model - 7 Layers</h2>
+
+                <div class="two-column">
+                    <div>
+                        <div class="layer-box" style="background: #7C3AED;">7. Application</div>
+                        <div class="layer-box" style="background: #8B5CF6;">6. Presentation</div>
+                        <div class="layer-box" style="background: #A78BFA;">5. Session</div>
+                        <div class="layer-box" style="background: #60A5FA;">4. Transport</div>
+                        <div class="layer-box" style="background: #34D399;">3. Network</div>
+                        <div class="layer-box" style="background: #FBBF24;">2. Data Link</div>
+                        <div class="layer-box" style="background: #F87171;">1. Physical</div>
+                    </div>
+                    <div class="small-text">
+                        <p><strong>Mnemonic:</strong></p>
+                        <p>"<strong>A</strong>ll <strong>P</strong>eople <strong>S</strong>eem <strong>T</strong>o <strong>N</strong>eed <strong>D</strong>ata <strong>P</strong>rocessing"</p>
+                        <p style="margin-top: 1rem;"><strong>Or bottom-up:</strong></p>
+                        <p>"<strong>P</strong>lease <strong>D</strong>o <strong>N</strong>ot <strong>T</strong>hrow <strong>S</strong>ausage <strong>P</strong>izza <strong>A</strong>way"</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Layer Details Upper -->
+            <section>
+                <h2 class="topic-osi">Upper Layers (7-5)</h2>
+
+                <div class="three-column small-text">
+                    <div class="topic-card">
+                        <h4 style="color: #7C3AED;">7. Application</h4>
+                        <ul>
+                            <li>User interface</li>
+                            <li>HTTP, FTP, SMTP</li>
+                            <li>DNS, SSH</li>
+                        </ul>
+                    </div>
+                    <div class="topic-card">
+                        <h4 style="color: #8B5CF6;">6. Presentation</h4>
+                        <ul>
+                            <li>Data formatting</li>
+                            <li>Encryption/Decryption</li>
+                            <li>Compression</li>
+                        </ul>
+                    </div>
+                    <div class="topic-card">
+                        <h4 style="color: #A78BFA;">5. Session</h4>
+                        <ul>
+                            <li>Session management</li>
+                            <li>Authentication</li>
+                            <li>Connection recovery</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="topic-card fragment">
+                    <p><strong>Key Insight:</strong> These layers deal with application data and are often combined in practice (TCP/IP model)</p>
+                </div>
+            </section>
+
+            <!-- Layer Details Lower -->
+            <section>
+                <h2 class="topic-osi">Lower Layers (4-1)</h2>
+
+                <table>
+                    <tr>
+                        <th>Layer</th>
+                        <th>Function</th>
+                        <th>PDU</th>
+                        <th>Examples</th>
+                    </tr>
+                    <tr>
+                        <td style="color: #60A5FA;">4. Transport</td>
+                        <td>End-to-end delivery</td>
+                        <td>Segment</td>
+                        <td>TCP, UDP</td>
+                    </tr>
+                    <tr>
+                        <td style="color: #34D399;">3. Network</td>
+                        <td>Logical addressing, routing</td>
+                        <td>Packet</td>
+                        <td>IP, ICMP</td>
+                    </tr>
+                    <tr>
+                        <td style="color: #FBBF24;">2. Data Link</td>
+                        <td>Physical addressing, framing</td>
+                        <td>Frame</td>
+                        <td>Ethernet, Wi-Fi</td>
+                    </tr>
+                    <tr>
+                        <td style="color: #F87171;">1. Physical</td>
+                        <td>Bit transmission</td>
+                        <td>Bits</td>
+                        <td>Cables, signals</td>
+                    </tr>
+                </table>
+
+                <div class="topic-card fragment">
+                    <p><strong>PDU:</strong> Protocol Data Unit - the name for data at each layer</p>
+                </div>
+            </section>
+
+            <!-- Encapsulation -->
+            <section>
+                <h2 class="topic-osi">Data Encapsulation</h2>
+
+                <p>As data travels down the stack, each layer adds its own header (and sometimes trailer).</p>
+
+                <div style="margin: 1rem 0; font-size: 0.8em;">
+                    <div style="background: #7C3AED; padding: 0.3rem; margin: 0.1rem 0;">Data</div>
+                    <div style="background: #60A5FA; padding: 0.3rem; margin: 0.1rem 0;">TCP Header | Data</div>
+                    <div style="background: #34D399; padding: 0.3rem; margin: 0.1rem 0;">IP Header | TCP Header | Data</div>
+                    <div style="background: #FBBF24; padding: 0.3rem; margin: 0.1rem 0;">Frame Header | IP Header | TCP Header | Data | Frame Trailer</div>
+                </div>
+
+                <div class="topic-card fragment">
+                    <p><strong>De-encapsulation:</strong> The reverse happens at the receiving end - headers are stripped as data moves up</p>
+                </div>
+            </section>
+
+            <!-- Section: TCP/IP Model -->
+            <section class="center">
+                <div class="day-header">
+                    <h3 style="margin: 0; color: white;">Module 2</h3>
+                </div>
+                <h1 class="topic-tcp">TCP/IP Model</h1>
+            </section>
+
+            <!-- TCP/IP vs OSI -->
+            <section>
+                <h2 class="topic-tcp">TCP/IP vs OSI Model</h2>
+
+                <div class="two-column">
+                    <div>
+                        <h4>OSI (7 Layers)</h4>
+                        <div class="layer-box tiny-text" style="background: #7C3AED;">Application</div>
+                        <div class="layer-box tiny-text" style="background: #8B5CF6;">Presentation</div>
+                        <div class="layer-box tiny-text" style="background: #A78BFA;">Session</div>
+                        <div class="layer-box tiny-text" style="background: #60A5FA;">Transport</div>
+                        <div class="layer-box tiny-text" style="background: #34D399;">Network</div>
+                        <div class="layer-box tiny-text" style="background: #FBBF24;">Data Link</div>
+                        <div class="layer-box tiny-text" style="background: #F87171;">Physical</div>
+                    </div>
+                    <div>
+                        <h4>TCP/IP (4 Layers)</h4>
+                        <div class="layer-box tiny-text" style="background: #7C3AED; height: 4.2rem; line-height: 4.2rem;">Application</div>
+                        <div class="layer-box tiny-text" style="background: #60A5FA;">Transport</div>
+                        <div class="layer-box tiny-text" style="background: #34D399;">Internet</div>
+                        <div class="layer-box tiny-text" style="background: #FBBF24; height: 2.8rem; line-height: 2.8rem;">Link (Network Access)</div>
+                    </div>
+                </div>
+
+                <div class="topic-card fragment">
+                    <p><strong>Reality:</strong> TCP/IP is what the Internet actually uses. OSI is primarily a teaching/reference model.</p>
+                </div>
+            </section>
+
+            <!-- TCP/IP Layers Detail -->
+            <section>
+                <h2 class="topic-tcp">TCP/IP Layer Details</h2>
+
+                <table>
+                    <tr>
+                        <th>Layer</th>
+                        <th>OSI Equivalent</th>
+                        <th>Key Protocols</th>
+                    </tr>
+                    <tr>
+                        <td style="color: #7C3AED;">Application</td>
+                        <td>Layers 5-7</td>
+                        <td>HTTP, HTTPS, FTP, SSH, DNS, SMTP</td>
+                    </tr>
+                    <tr>
+                        <td style="color: #60A5FA;">Transport</td>
+                        <td>Layer 4</td>
+                        <td>TCP, UDP</td>
+                    </tr>
+                    <tr>
+                        <td style="color: #34D399;">Internet</td>
+                        <td>Layer 3</td>
+                        <td>IP, ICMP, ARP</td>
+                    </tr>
+                    <tr>
+                        <td style="color: #FBBF24;">Link</td>
+                        <td>Layers 1-2</td>
+                        <td>Ethernet, Wi-Fi, PPP</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- TCP vs UDP -->
+            <section>
+                <h2 class="topic-tcp">TCP vs UDP</h2>
+
+                <div class="two-column small-text">
+                    <div class="topic-card">
+                        <h4 style="color: #60A5FA;">TCP (Transmission Control Protocol)</h4>
+                        <ul>
+                            <li>Connection-oriented</li>
+                            <li>Reliable delivery</li>
+                            <li>Ordered packets</li>
+                            <li>Error checking & retransmission</li>
+                            <li>Flow control</li>
+                        </ul>
+                        <p><strong>Use:</strong> Web, email, file transfer</p>
+                    </div>
+                    <div class="topic-card">
+                        <h4 style="color: #34D399;">UDP (User Datagram Protocol)</h4>
+                        <ul>
+                            <li>Connectionless</li>
+                            <li>Best-effort delivery</li>
+                            <li>No ordering guarantee</li>
+                            <li>No retransmission</li>
+                            <li>Lower overhead</li>
+                        </ul>
+                        <p><strong>Use:</strong> Streaming, gaming, DNS</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Three-Way Handshake -->
+            <section>
+                <h2 class="topic-tcp">TCP Three-Way Handshake</h2>
+
+                <p>TCP establishes connections using a three-step process:</p>
+
+                <div style="margin: 1rem 0; font-size: 0.8em;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                        <div style="width: 30%; text-align: center;"><strong>Client</strong></div>
+                        <div style="width: 40%;"></div>
+                        <div style="width: 30%; text-align: center;"><strong>Server</strong></div>
+                    </div>
+                    <div style="display: flex; align-items: center; margin: 0.5rem 0;">
+                        <div style="width: 30%;"></div>
+                        <div style="width: 40%; text-align: center; color: #60A5FA;">1. SYN →</div>
+                        <div style="width: 30%;"></div>
+                    </div>
+                    <div style="display: flex; align-items: center; margin: 0.5rem 0;">
+                        <div style="width: 30%;"></div>
+                        <div style="width: 40%; text-align: center; color: #34D399;">← 2. SYN-ACK</div>
+                        <div style="width: 30%;"></div>
+                    </div>
+                    <div style="display: flex; align-items: center; margin: 0.5rem 0;">
+                        <div style="width: 30%;"></div>
+                        <div style="width: 40%; text-align: center; color: #F472B6;">3. ACK →</div>
+                        <div style="width: 30%;"></div>
+                    </div>
+                </div>
+
+                <div class="topic-card fragment">
+                    <p><strong>Result:</strong> Both sides agree on initial sequence numbers and connection parameters</p>
+                </div>
+            </section>
+
+            <!-- Section: Protocols and Ports -->
+            <section class="center">
+                <div class="day-header">
+                    <h3 style="margin: 0; color: white;">Module 3</h3>
+                </div>
+                <h1 class="topic-ip">Protocols and Ports</h1>
+            </section>
+
+            <!-- Port Numbers -->
+            <section>
+                <h2 class="topic-ip">Understanding Ports</h2>
+
+                <p>Ports allow multiple services to run on a single IP address.</p>
+
+                <h3>Port Ranges</h3>
+                <table>
+                    <tr>
+                        <th>Range</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                    </tr>
+                    <tr>
+                        <td>0-1023</td>
+                        <td>Well-Known</td>
+                        <td>Reserved for system services (requires root)</td>
+                    </tr>
+                    <tr>
+                        <td>1024-49151</td>
+                        <td>Registered</td>
+                        <td>Assigned by IANA for specific services</td>
+                    </tr>
+                    <tr>
+                        <td>49152-65535</td>
+                        <td>Dynamic/Ephemeral</td>
+                        <td>Used by client applications</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- Common Ports -->
+            <section>
+                <h2 class="topic-ip">Common Ports to Know</h2>
+
+                <div class="two-column tiny-text">
+                    <div>
+                        <table>
+                            <tr><th>Port</th><th>Protocol</th><th>Service</th></tr>
+                            <tr><td>20-21</td><td>TCP</td><td>FTP</td></tr>
+                            <tr><td>22</td><td>TCP</td><td>SSH</td></tr>
+                            <tr><td>23</td><td>TCP</td><td>Telnet</td></tr>
+                            <tr><td>25</td><td>TCP</td><td>SMTP</td></tr>
+                            <tr><td>53</td><td>TCP/UDP</td><td>DNS</td></tr>
+                            <tr><td>67-68</td><td>UDP</td><td>DHCP</td></tr>
+                        </table>
+                    </div>
+                    <div>
+                        <table>
+                            <tr><th>Port</th><th>Protocol</th><th>Service</th></tr>
+                            <tr><td>80</td><td>TCP</td><td>HTTP</td></tr>
+                            <tr><td>110</td><td>TCP</td><td>POP3</td></tr>
+                            <tr><td>143</td><td>TCP</td><td>IMAP</td></tr>
+                            <tr><td>443</td><td>TCP</td><td>HTTPS</td></tr>
+                            <tr><td>3306</td><td>TCP</td><td>MySQL</td></tr>
+                            <tr><td>5432</td><td>TCP</td><td>PostgreSQL</td></tr>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Lab: OSI and Protocols -->
+            <section class="lab-slide">
+                <h2>Lab: OSI Model and Protocols</h2>
+
+                <h3>Exercise Objectives</h3>
+                <ul>
+                    <li>Explore network interfaces and configuration</li>
+                    <li>Use common networking commands</li>
+                    <li>Analyze network traffic at different layers</li>
+                    <li>Identify protocols and ports in use</li>
+                </ul>
+
+                <h3>Tools You'll Use</h3>
+                <ul>
+                    <li><code>ip</code>, <code>ss</code>, <code>netstat</code></li>
+                    <li><code>tcpdump</code>, <code>ping</code>, <code>traceroute</code></li>
+                </ul>
+            </section>
+
+            <!-- Section: IP Addressing -->
+            <section class="center">
+                <div class="day-header">
+                    <h3 style="margin: 0; color: white;">Module 4</h3>
+                </div>
+                <h1 class="topic-ip">IP Addressing</h1>
+            </section>
+
+            <!-- IPv4 Basics -->
+            <section>
+                <h2 class="topic-ip">IPv4 Address Structure</h2>
+
+                <p>IPv4 addresses are 32-bit numbers, typically written in dotted-decimal notation.</p>
+
+                <div class="code-block" style="text-align: center; margin: 1rem 0;">
+                    <span class="string">192.168.1.100</span>
+                </div>
+
+                <div class="two-column small-text">
+                    <div>
+                        <h4>Binary Representation</h4>
+                        <p>Each octet is 8 bits (0-255)</p>
+                        <code>11000000.10101000.00000001.01100100</code>
+                    </div>
+                    <div>
+                        <h4>Total Addresses</h4>
+                        <p>2^32 = ~4.3 billion addresses</p>
+                        <p style="color: #F87171;">Not enough for today's devices!</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- IP Classes -->
+            <section>
+                <h2 class="topic-ip">IPv4 Address Classes</h2>
+
+                <table class="small-text">
+                    <tr>
+                        <th>Class</th>
+                        <th>First Octet</th>
+                        <th>Default Mask</th>
+                        <th>Use</th>
+                    </tr>
+                    <tr>
+                        <td>A</td>
+                        <td>1-126</td>
+                        <td>255.0.0.0 (/8)</td>
+                        <td>Large networks</td>
+                    </tr>
+                    <tr>
+                        <td>B</td>
+                        <td>128-191</td>
+                        <td>255.255.0.0 (/16)</td>
+                        <td>Medium networks</td>
+                    </tr>
+                    <tr>
+                        <td>C</td>
+                        <td>192-223</td>
+                        <td>255.255.255.0 (/24)</td>
+                        <td>Small networks</td>
+                    </tr>
+                    <tr>
+                        <td>D</td>
+                        <td>224-239</td>
+                        <td>N/A</td>
+                        <td>Multicast</td>
+                    </tr>
+                    <tr>
+                        <td>E</td>
+                        <td>240-255</td>
+                        <td>N/A</td>
+                        <td>Experimental</td>
+                    </tr>
+                </table>
+
+                <div class="topic-card fragment">
+                    <p><strong>Note:</strong> Classful addressing is largely historical. Modern networks use CIDR.</p>
+                </div>
+            </section>
+
+            <!-- Private IP Ranges -->
+            <section>
+                <h2 class="topic-ip">Private IP Address Ranges</h2>
+
+                <p>Reserved for internal networks, not routable on the Internet.</p>
+
+                <table>
+                    <tr>
+                        <th>Class</th>
+                        <th>Range</th>
+                        <th>CIDR</th>
+                        <th>Addresses</th>
+                    </tr>
+                    <tr>
+                        <td>A</td>
+                        <td>10.0.0.0 - 10.255.255.255</td>
+                        <td>10.0.0.0/8</td>
+                        <td>16.7 million</td>
+                    </tr>
+                    <tr>
+                        <td>B</td>
+                        <td>172.16.0.0 - 172.31.255.255</td>
+                        <td>172.16.0.0/12</td>
+                        <td>1 million</td>
+                    </tr>
+                    <tr>
+                        <td>C</td>
+                        <td>192.168.0.0 - 192.168.255.255</td>
+                        <td>192.168.0.0/16</td>
+                        <td>65,536</td>
+                    </tr>
+                </table>
+
+                <div class="topic-card fragment">
+                    <p><strong>Common:</strong> Home routers typically use 192.168.0.0/24 or 192.168.1.0/24</p>
+                </div>
+            </section>
+
+            <!-- CIDR Notation -->
+            <section>
+                <h2 class="topic-ip">CIDR Notation</h2>
+
+                <p><strong>CIDR</strong> (Classless Inter-Domain Routing) replaced classful addressing.</p>
+
+                <div class="code-block" style="margin: 1rem 0;">
+                    <span class="string">192.168.1.0/24</span>
+                    <span class="comment"> ← /24 means 24 bits for network, 8 bits for hosts</span>
+                </div>
+
+                <table class="small-text">
+                    <tr>
+                        <th>CIDR</th>
+                        <th>Subnet Mask</th>
+                        <th>Hosts</th>
+                        <th>Use</th>
+                    </tr>
+                    <tr>
+                        <td>/24</td>
+                        <td>255.255.255.0</td>
+                        <td>254</td>
+                        <td>Small office</td>
+                    </tr>
+                    <tr>
+                        <td>/16</td>
+                        <td>255.255.0.0</td>
+                        <td>65,534</td>
+                        <td>Large campus</td>
+                    </tr>
+                    <tr>
+                        <td>/30</td>
+                        <td>255.255.255.252</td>
+                        <td>2</td>
+                        <td>Point-to-point</td>
+                    </tr>
+                    <tr>
+                        <td>/32</td>
+                        <td>255.255.255.255</td>
+                        <td>1</td>
+                        <td>Single host</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- Subnetting -->
+            <section>
+                <h2 class="topic-ip">Subnetting Basics</h2>
+
+                <p>Subnetting divides a network into smaller networks for better organization and security.</p>
+
+                <div class="two-column small-text">
+                    <div>
+                        <h4>Why Subnet?</h4>
+                        <ul>
+                            <li class="fragment">Reduce broadcast domains</li>
+                            <li class="fragment">Improve security (segment traffic)</li>
+                            <li class="fragment">Efficient IP allocation</li>
+                            <li class="fragment">Easier management</li>
+                        </ul>
+                    </div>
+                    <div class="fragment">
+                        <h4>Example</h4>
+                        <p>Split 192.168.1.0/24 into 4 subnets:</p>
+                        <ul style="font-size: 0.8em;">
+                            <li>192.168.1.0/26 (0-63)</li>
+                            <li>192.168.1.64/26 (64-127)</li>
+                            <li>192.168.1.128/26 (128-191)</li>
+                            <li>192.168.1.192/26 (192-255)</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- IPv6 -->
+            <section>
+                <h2 class="topic-ip">IPv6 Overview</h2>
+
+                <p>IPv6 uses 128-bit addresses, providing virtually unlimited addresses.</p>
+
+                <div class="code-block" style="margin: 1rem 0;">
+                    <span class="string">2001:0db8:85a3:0000:0000:8a2e:0370:7334</span>
+                </div>
+
+                <h3 class="fragment">Key Differences from IPv4</h3>
+                <ul class="fragment small-text">
+                    <li><strong>Address space:</strong> 2^128 addresses (340 undecillion)</li>
+                    <li><strong>No NAT needed:</strong> Every device can have a public address</li>
+                    <li><strong>No broadcast:</strong> Uses multicast instead</li>
+                    <li><strong>Auto-configuration:</strong> SLAAC (Stateless Address Autoconfiguration)</li>
+                </ul>
+
+                <div class="topic-card fragment">
+                    <p><strong>Shorthand:</strong> <code>::</code> represents consecutive zeros: <code>2001:db8::1</code></p>
+                </div>
+            </section>
+
+            <!-- Lab: IP Addressing -->
+            <section class="lab-slide">
+                <h2>Lab: IP Addressing and Subnets</h2>
+
+                <h3>Exercise Objectives</h3>
+                <ul>
+                    <li>View and configure IP addresses</li>
+                    <li>Calculate subnet ranges</li>
+                    <li>Understand CIDR notation</li>
+                    <li>Explore IPv6 addresses</li>
+                </ul>
+
+                <h3>Tools You'll Use</h3>
+                <ul>
+                    <li><code>ip addr</code>, <code>ip route</code></li>
+                    <li><code>ipcalc</code> for subnet calculations</li>
+                </ul>
+            </section>
+
+            <!-- Section: NAT and Routing -->
+            <section class="center">
+                <div class="day-header">
+                    <h3 style="margin: 0; color: white;">Module 5</h3>
+                </div>
+                <h1 class="topic-routing">NAT, Routing, and DHCP</h1>
+            </section>
+
+            <!-- NAT -->
+            <section>
+                <h2 class="topic-routing">Network Address Translation (NAT)</h2>
+
+                <p>NAT translates private IP addresses to public IP addresses, allowing multiple devices to share one public IP.</p>
+
+                <div class="two-column small-text">
+                    <div>
+                        <h4>Without NAT</h4>
+                        <p>Every device needs a public IP</p>
+                        <p style="color: #F87171;">IPv4 exhaustion!</p>
+                    </div>
+                    <div>
+                        <h4>With NAT</h4>
+                        <p>Many private IPs → One public IP</p>
+                        <p style="color: #34D399;">Conserves addresses</p>
+                    </div>
+                </div>
+
+                <h3 class="fragment">NAT Types</h3>
+                <ul class="fragment small-text">
+                    <li><strong>SNAT:</strong> Source NAT - changes source address (outbound)</li>
+                    <li><strong>DNAT:</strong> Destination NAT - changes destination address (inbound/port forwarding)</li>
+                    <li><strong>PAT/NAPT:</strong> Port Address Translation - multiple internal IPs share one external IP using different ports</li>
+                </ul>
+            </section>
+
+            <!-- IP Routing -->
+            <section>
+                <h2 class="topic-routing">IP Routing Basics</h2>
+
+                <p>Routing determines how packets travel from source to destination across networks.</p>
+
+                <h3>Key Concepts</h3>
+                <ul class="small-text">
+                    <li class="fragment"><strong>Routing Table:</strong> Maps destination networks to next-hop addresses</li>
+                    <li class="fragment"><strong>Default Gateway:</strong> Where to send packets for unknown destinations</li>
+                    <li class="fragment"><strong>Hop:</strong> Each router the packet passes through</li>
+                    <li class="fragment"><strong>TTL:</strong> Time-to-live prevents infinite loops</li>
+                </ul>
+
+                <div class="code-block fragment" style="margin-top: 1rem;">
+                    <pre><span class="comment"># View routing table</span>
+<span class="command">ip route show</span>
+default via 192.168.1.1 dev eth0
+192.168.1.0/24 dev eth0 proto kernel scope link</pre>
+                </div>
+            </section>
+
+            <!-- DHCP -->
+            <section>
+                <h2 class="topic-routing">Dynamic Host Configuration Protocol</h2>
+
+                <p>DHCP automatically assigns IP addresses and network configuration to devices.</p>
+
+                <h3>DHCP Process (DORA)</h3>
+                <div style="display: flex; justify-content: space-between; margin: 1rem 0;">
+                    <div class="topic-card" style="flex: 1; margin: 0 0.25rem; text-align: center;">
+                        <h4>1. Discover</h4>
+                        <p class="tiny-text">Client broadcasts</p>
+                    </div>
+                    <div class="topic-card" style="flex: 1; margin: 0 0.25rem; text-align: center;">
+                        <h4>2. Offer</h4>
+                        <p class="tiny-text">Server responds</p>
+                    </div>
+                    <div class="topic-card" style="flex: 1; margin: 0 0.25rem; text-align: center;">
+                        <h4>3. Request</h4>
+                        <p class="tiny-text">Client accepts</p>
+                    </div>
+                    <div class="topic-card" style="flex: 1; margin: 0 0.25rem; text-align: center;">
+                        <h4>4. Acknowledge</h4>
+                        <p class="tiny-text">Server confirms</p>
+                    </div>
+                </div>
+
+                <h3 class="fragment">DHCP Provides</h3>
+                <ul class="fragment small-text">
+                    <li>IP address and subnet mask</li>
+                    <li>Default gateway</li>
+                    <li>DNS server addresses</li>
+                    <li>Lease time</li>
+                </ul>
+            </section>
+
+            <!-- Section: DNS -->
+            <section class="center">
+                <div class="day-header">
+                    <h3 style="margin: 0; color: white;">Module 6</h3>
+                </div>
+                <h1 class="topic-services">Domain Name System (DNS)</h1>
+            </section>
+
+            <!-- DNS Overview -->
+            <section>
+                <h2 class="topic-services">What is DNS?</h2>
+
+                <p>DNS translates human-readable domain names to IP addresses.</p>
+
+                <div class="code-block" style="margin: 1rem 0; text-align: center;">
+                    <span class="string">www.example.com</span> → <span class="keyword">93.184.216.34</span>
+                </div>
+
+                <h3>Why DNS?</h3>
+                <ul class="small-text">
+                    <li class="fragment">Humans remember names better than numbers</li>
+                    <li class="fragment">IP addresses can change without affecting users</li>
+                    <li class="fragment">Enables load balancing (multiple IPs per name)</li>
+                    <li class="fragment">Distributed, hierarchical system for scalability</li>
+                </ul>
+            </section>
+
+            <!-- DNS Hierarchy -->
+            <section>
+                <h2 class="topic-services">DNS Hierarchy</h2>
+
+                <div style="margin: 1rem 0; font-size: 0.8em;">
+                    <div class="layer-box" style="background: #7C3AED;">Root DNS Servers (.)</div>
+                    <div class="layer-box" style="background: #60A5FA;">TLD Servers (.com, .org, .net)</div>
+                    <div class="layer-box" style="background: #34D399;">Authoritative Servers (example.com)</div>
+                    <div class="layer-box" style="background: #FBBF24;">Local DNS Resolver (Your ISP/Company)</div>
+                </div>
+
+                <div class="topic-card fragment">
+                    <p><strong>Resolution:</strong> Queries flow down from root to find the authoritative server for a domain</p>
+                </div>
+            </section>
+
+            <!-- DNS Record Types -->
+            <section>
+                <h2 class="topic-services">Common DNS Record Types</h2>
+
+                <table>
+                    <tr>
+                        <th>Type</th>
+                        <th>Purpose</th>
+                        <th>Example</th>
+                    </tr>
+                    <tr>
+                        <td>A</td>
+                        <td>Maps name to IPv4</td>
+                        <td>example.com → 93.184.216.34</td>
+                    </tr>
+                    <tr>
+                        <td>AAAA</td>
+                        <td>Maps name to IPv6</td>
+                        <td>example.com → 2606:2800:220:1:...</td>
+                    </tr>
+                    <tr>
+                        <td>CNAME</td>
+                        <td>Alias to another name</td>
+                        <td>www → example.com</td>
+                    </tr>
+                    <tr>
+                        <td>MX</td>
+                        <td>Mail server</td>
+                        <td>mail.example.com (priority 10)</td>
+                    </tr>
+                    <tr>
+                        <td>NS</td>
+                        <td>Name server</td>
+                        <td>ns1.example.com</td>
+                    </tr>
+                    <tr>
+                        <td>TXT</td>
+                        <td>Text records</td>
+                        <td>SPF, DKIM verification</td>
+                    </tr>
+                </table>
+            </section>
+
+            <!-- DNS Tools -->
+            <section>
+                <h2 class="topic-services">DNS Lookup Tools</h2>
+
+                <div class="code-block small-text">
+                    <pre><span class="comment"># Simple lookup</span>
+<span class="command">host example.com</span>
+
+<span class="comment"># Detailed query</span>
+<span class="command">dig example.com</span>
+
+<span class="comment"># Query specific record type</span>
+<span class="command">dig example.com MX</span>
+
+<span class="comment"># Query specific DNS server</span>
+<span class="command">dig @8.8.8.8 example.com</span>
+
+<span class="comment"># Reverse lookup (IP to name)</span>
+<span class="command">dig -x 93.184.216.34</span></pre>
+                </div>
+            </section>
+
+            <!-- Lab: NAT and DNS -->
+            <section class="lab-slide">
+                <h2>Lab: NAT, Routing, and DNS</h2>
+
+                <h3>Exercise Objectives</h3>
+                <ul>
+                    <li>Examine routing tables and gateways</li>
+                    <li>Trace packet paths across networks</li>
+                    <li>Query DNS records</li>
+                    <li>Understand DNS resolution process</li>
+                </ul>
+
+                <h3>Tools You'll Use</h3>
+                <ul>
+                    <li><code>ip route</code>, <code>traceroute</code></li>
+                    <li><code>dig</code>, <code>host</code>, <code>nslookup</code></li>
+                </ul>
+            </section>
+
+            <!-- Course Summary -->
+            <section>
+                <h2>Course Summary</h2>
+
+                <div class="three-column small-text">
+                    <div class="topic-card">
+                        <h4 class="topic-osi">Models</h4>
+                        <ul>
+                            <li>OSI 7-layer model</li>
+                            <li>TCP/IP 4-layer model</li>
+                            <li>Encapsulation</li>
+                        </ul>
+                    </div>
+                    <div class="topic-card">
+                        <h4 class="topic-ip">Addressing</h4>
+                        <ul>
+                            <li>IPv4 and IPv6</li>
+                            <li>CIDR notation</li>
+                            <li>Subnetting</li>
+                        </ul>
+                    </div>
+                    <div class="topic-card">
+                        <h4 class="topic-services">Services</h4>
+                        <ul>
+                            <li>NAT and routing</li>
+                            <li>DHCP</li>
+                            <li>DNS</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3 class="fragment">Key Takeaways</h3>
+                <ul class="fragment small-text">
+                    <li>Reference models help troubleshoot by isolating problems to layers</li>
+                    <li>TCP provides reliability; UDP provides speed</li>
+                    <li>Private IP addresses + NAT enable Internet scalability</li>
+                    <li>DNS is the "phone book" of the Internet</li>
+                </ul>
+            </section>
+
+            <!-- Thank You -->
+            <section class="center">
+                <h1>Questions?</h1>
+                <p style="margin-top: 2rem; color: var(--net-gray);">Networking Fundamentals</p>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/reveal.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/plugin/notes/notes.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/plugin/highlight/highlight.js"></script>
+    <script>
+        Reveal.initialize({
+            hash: true,
+            slideNumber: true,
+            plugins: [ RevealNotes, RevealHighlight ]
+        });
+    </script>
+</body>
+</html>
